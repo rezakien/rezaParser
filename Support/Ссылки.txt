@@ -1,0 +1,11 @@
+﻿1) Первый опыт с Python. Парсинг данных веб-сайта (видеозапись вебинара)
+https://geekbrains.ru/events/1086
+
+2) Скрапинг веб-страниц в Python с Beautiful Soup
+https://code.tutsplus.com/ru/tutorials/scraping-webpages-in-python-with-beautiful-soup-search-and-dom-modification--cms-28276
+
+3) Документация по Beautiful Soup
+http://http://wiki.python.su/%D0%94%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D0%B8/BeautifulSoup
+
+4) Очень хорошое видео про обработку и анализ текста. Это ознакомительный кусочек платного курса, но для начала очень хорош, чтобы вообще понять как анализировать текст.
+https://www.coursera.org/lecture/data-analysis-applications/rabota-s-tiekstovymi-dannymi-nCiGZ
