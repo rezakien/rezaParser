@@ -5,7 +5,7 @@ import os
 import json
 class MVideo(object):
 	# Поля класса парсера МВидео
-	MainUrl = 'http://mvideo.ru/'
+	MainUrl = 'http://mvideo.ru'
 	Categories = {}
 	Products = {}
 	ProductsCount = 0
