@@ -5,14 +5,17 @@ import os
 import json
 class MVideo(object):
 	# Поля класса парсера МВидео
+	MainUrl = 'http://mvideo.ru/'
 	Categories = {}
 	Products = {}
+	ProductsCount = 0
 	CategoriesColumnNames = ['Категория','Url']
-	ProductsColumnNames = ['Продукт','Цена(руб.)','Категория']
+	ProductsColumnNames = ['Продукт','Цена(руб.)','Категория','Url']
 	url = 'https://www.mvideo.ru/catalog'
 	CategoriesFileName = 'files/categories.csv'
 	SubCategoriesFileName = 'files/subcategories.csv'
 	ProductsFileName = 'files/products.csv'
+
 	def __init__(self):
 		self.url = self.url
 	
@@ -94,6 +97,7 @@ class MVideo(object):
 				for row in reader:
 					if(not row[0]=='Подкатегория'):
 						try:
+							#! Количество страниц по подкатегориям.
 							totalPages = self.GetPages(row[1])
 							if(not totalPages==None):
 								for i in range(0,totalPages+1):
@@ -105,7 +109,7 @@ class MVideo(object):
 									else:
 										self.url = row[1]
 
-									print(self.url,'total pages =',totalPages)
+									#print(self.url,'total pages =',totalPages)
 									soup = BeautifulSoup(self.get_html(),'lxml')
 									try:
 										productsDict = dict.fromkeys(['ProductName','ProductLocalPrice','ProductCategoru'], 'None')
@@ -119,8 +123,9 @@ class MVideo(object):
 												ProductName = ProductDictObject['productName']
 												ProductPrice = ProductDictObject['productPriceLocal']
 												ProductCategory = ProductDictObject['productCategoryName']
-												ProductUrl = productObject.find('h4').find('a').get('href').strip()
+												ProductUrl = self.MainUrl + productObject.find('h4').find('a').get('href').strip()
 												productsDict[index] = {'ProductName':ProductName,'ProductPrice':ProductPrice,'ProductCategory':ProductCategory,'ProductUrl':ProductUrl}
+												
 											self.writeCSVProducts(self.ProductsFileName,self.ProductsColumnNames,productsDict)
 									except Exception:
 										print('Error on parsing the certain product!')
@@ -171,11 +176,13 @@ class MVideo(object):
 			res = "Файл '" + filename.split('/')[1] + "'записан. Путь: '" + filename.split('/')[0] + "/'"
 			print(res)
 	def writeCSVProducts(self,filename,columnsNames,dictionary):
+		if(not os.path.isfile(filename)):
+			with open(filename, 'a',newline='',encoding='utf-8') as file:
+				writer = csv.writer(file,delimiter="|")
+				writer.writerow(columnsNames)
 		with open(filename, 'a',newline='',encoding='utf-8') as file:
 			writer = csv.writer(file,delimiter="|")
-			writer.writerow(columnsNames)
 			for key,item in dictionary.items():
-				for key, item in item.items():
-					writer.writerow([str(key).strip() ,str(item)])
-		res = "Файл '" + filename.split('/')[1] + "'записан. Путь: '" + filename.split('/')[0] + "/'"
+				writer.writerow([str(item['ProductName']),str(item['ProductPrice']),str(item['ProductCategory']),str(item['ProductUrl'])])
+		res = "Файл '" + filename.split('/')[1] + "'записан. Путь: '" + filename.split('/')[0] + "/" + filename.split('/')[1] + "'"
 		print(res)
